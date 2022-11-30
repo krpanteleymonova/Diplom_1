@@ -34,7 +34,8 @@ public class Burger {
         float price = bun.getPrice() * 2;
 
         for (Ingredient ingredient : ingredients) {
-            price += ingredient.getPrice();
+           price += ingredient.getPrice();
+
         }
 
         return price;
