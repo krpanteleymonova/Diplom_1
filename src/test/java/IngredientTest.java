@@ -2,38 +2,39 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.mockito.Mock;
 import praktikum.Ingredient;
 import praktikum.IngredientType;
 
 import static org.junit.Assert.assertEquals;
-import static praktikum.IngredientType.FILLING;
-import static praktikum.IngredientType.SAUCE;
 
 @RunWith(Parameterized.class)
 public class IngredientTest {
 
-    private final IngredientType type;
+
     private final String name;
     private final float price;
 
-    public IngredientTest(IngredientType type, String name, float price) {
-        this.type = type;
+    public IngredientTest(String name, float price) {
         this.name = name;
         this.price = price;
     }
 
     Ingredient ingredient;
 
+    @Mock
+    IngredientType ingredientType;
+
     @Before
     public void setUp() {
-        ingredient = new Ingredient(type, name, price);
+        ingredient = new Ingredient(ingredientType, name, price);
     }
 
     @Parameterized.Parameters
     public static Object[][] getBurgerInside() {
         return new Object[][]{
-                {FILLING, "Котлета", 100},
-                {SAUCE, "Cоус", 35.99f},
+                {"Котлета", 100},
+                {"Cоус", 35.99f},
         };
     }
 
@@ -51,9 +52,6 @@ public class IngredientTest {
 
     @Test
     public void ingredientGetTypeTest() {
-        System.out.println(ingredient.getType());
-        assertEquals("Некорректное название", type, ingredient.getType());
+        assertEquals("Некорректное название", ingredientType, ingredient.getType());
     }
-
-
 }

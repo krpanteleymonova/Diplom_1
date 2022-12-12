@@ -15,18 +15,13 @@ public class BunTest {
 
     @Test
     public void bunGetNameTest() {
-
         System.out.println(bun.getName());
         assertEquals("Некорректное название булочки", "Флюресцентная булка", bun.getName());
     }
 
     @Test
     public void bunGetPriceTest() {
-
         System.out.println(bun.getPrice());
         assertEquals(100.5f, bun.getPrice(), 0);
-
     }
-
-
 }

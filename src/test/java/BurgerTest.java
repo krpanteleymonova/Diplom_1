@@ -7,65 +7,62 @@ import org.mockito.junit.MockitoJUnitRunner;
 import praktikum.Bun;
 import praktikum.Burger;
 import praktikum.Ingredient;
+import praktikum.IngredientType;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static praktikum.IngredientType.FILLING;
-import static praktikum.IngredientType.SAUCE;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BurgerTest {
-    Ingredient ingredientFillingMeat;
-    Ingredient ingredientFillingCheese;
-    Ingredient ingredientSauce;
-    Ingredient ingredientFillingSalad;
+
     Burger burger;
 
     @Mock
     Bun bun;
     @Mock
-    Ingredient ingredient;
+    Ingredient ingredientFillingMeat;
+    @Mock
+    Ingredient ingredientFillingCheese;
+    @Mock
+    Ingredient ingredientFillingSalad;
+    @Mock
+    Ingredient ingredientSauce;
 
     @Before
     public void setUp() {
-
-        ingredientFillingMeat = new Ingredient(FILLING, "Котлета", 100);
-        ingredientFillingCheese = new Ingredient(FILLING, "Сыр", 80);
-        ingredientFillingSalad = new Ingredient(FILLING, "Салат", 60);
-        ingredientSauce = new Ingredient(SAUCE, "Кетчуп", 30);
         burger = new Burger();
     }
 
     @Test
     public void burgerGetPriceTest() {
-        Mockito.when(bun.getPrice()).thenReturn(69.9f);
-        Mockito.when(ingredient.getPrice()).thenReturn(30.2f);
+        bunGetMockito();
         burger.setBuns(bun);
-        burger.addIngredient(ingredient);
+        ingredientFillingMeatGetMockito();
+        burger.addIngredient(ingredientFillingMeat);
         assertEquals(170, burger.getPrice(), 0);
     }
 
     @Test
     public void burgerGetReceiptTest() {
-        Mockito.when(bun.getPrice()).thenReturn(69.9f);
-        Mockito.when(bun.getName()).thenReturn("Булочка с кунжутом");
-        Mockito.when(ingredient.getPrice()).thenReturn(30.2f);
-        Mockito.when(ingredient.getType()).thenReturn(FILLING);
-        Mockito.when(ingredient.getName()).thenReturn("Котлета");
+        bunGetMockito();
         burger.setBuns(bun);
-        burger.addIngredient(ingredient);
+        ingredientFillingMeatGetMockito();
+        burger.addIngredient(ingredientFillingMeat);
         System.out.println(burger.getReceipt());
         assertTrue(burger.getReceipt().contains("==== Булочка с кунжутом ===="));
         assertTrue(burger.getReceipt().contains("Котлета"));
         assertTrue(burger.getReceipt().contains("Price: 170,000000"));
-
     }
-
 
     @Test
     public void burgerAddIngredientTest() {
         burgerAddIngredient();
+        assertEquals("Некорректное кол-во ингридиентов", 4, burger.ingredients.size());
+        assertTrue("Бургер не содержит котлету", burger.ingredients.get(0).equals(ingredientFillingMeat));
+        assertTrue("Бургер не содержит сыр", burger.ingredients.get(1).equals(ingredientFillingCheese));
+        assertTrue("Бургер не содержит соус", burger.ingredients.get(2).equals(ingredientSauce));
+        assertTrue("Бургер не содержит салат", burger.ingredients.get(3).equals(ingredientFillingSalad));
     }
 
     @Test
@@ -77,11 +74,9 @@ public class BurgerTest {
         assertTrue("Бургер не содержит салат", burger.ingredients.get(1).equals(ingredientFillingSalad));
         assertTrue("Бургер не содержит сыр", burger.ingredients.get(2).equals(ingredientFillingCheese));
         assertTrue("Бургер не содержит соус", burger.ingredients.get(3).equals(ingredientSauce));
-
     }
 
     @Test
-
     public void burgerRemoveIngredientTest() {
         burgerAddIngredient();
         burger.removeIngredient(1);
@@ -93,7 +88,6 @@ public class BurgerTest {
         assertTrue("Бургер не содержит салат", burger.ingredients.get(2).equals(ingredientFillingSalad));
     }
 
-
     private void burgerAddIngredient() {
         assertEquals("Некорректное кол-во ингридиентов", 0, burger.ingredients.size());
         burger.addIngredient(ingredientFillingMeat);
@@ -101,10 +95,16 @@ public class BurgerTest {
         burger.addIngredient(ingredientSauce);
         burger.addIngredient(ingredientFillingSalad);
         System.out.println(burger.ingredients.size());
-        assertEquals("Некорректное кол-во ингридиентов", 4, burger.ingredients.size());
-        assertTrue("Бургер не содержит котлету", burger.ingredients.get(0).equals(ingredientFillingMeat));
-        assertTrue("Бургер не содержит сыр", burger.ingredients.get(1).equals(ingredientFillingCheese));
-        assertTrue("Бургер не содержит соус", burger.ingredients.get(2).equals(ingredientSauce));
-        assertTrue("Бургер не содержит салат", burger.ingredients.get(3).equals(ingredientFillingSalad));
+    }
+
+    public void bunGetMockito() {
+        Mockito.when(bun.getName()).thenReturn("Булочка с кунжутом");
+        Mockito.when(bun.getPrice()).thenReturn(69.9f);
+    }
+
+    public void ingredientFillingMeatGetMockito() {
+        Mockito.when(ingredientFillingMeat.getPrice()).thenReturn(30.2f);
+        Mockito.when(ingredientFillingMeat.getType()).thenReturn(IngredientType.valueOf("FILLING"));
+        Mockito.when(ingredientFillingMeat.getName()).thenReturn("Котлета");
     }
 }
